@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const path = require('path');
-const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
@@ -36,18 +35,6 @@ module.exports = (env, argv) => {
         // Enable sourcemaps while debugging
         devtool: argv.mode === 'development' ? 'eval-source-map' : undefined,
 
-        // Minify the code when making a final build
-        optimization: {
-            minimize: argv.mode === 'production',
-            minimizer: [new TerserPlugin({
-                terserOptions: {
-                    ecma: 6,
-                    compress: { drop_console: true },
-                    output: { comments: false, beautify: false },
-                },
-            })],
-        },
-
 
         // Explain webpack how to do Typescript
         module: {
@@ -68,11 +55,6 @@ module.exports = (env, argv) => {
         },
 
         plugins: [
-            // Copy our static assets to the final build
-            new CopyPlugin({
-                patterns: [{ from: 'static/' }],
-            }),
-
             // Make an index.html from the template
             new HtmlWebpackPlugin({
                 template: 'src/index.ejs',
